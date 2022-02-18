@@ -1,6 +1,10 @@
 ;; Global keys
 (global-set-key (kbd "<f5>") 'revert-buffer)
 
+;; When the <> keys are not accessible by the left hand
+(global-set-key (kbd "M-z") 'beginning-of-buffer)
+(global-set-key (kbd "M-Z") 'end-of-buffer)
+
 ;; Global settings
 (global-linum-mode 1)
 
@@ -36,7 +40,7 @@
 (set-fringe-mode 10)
 (menu-bar-mode -1)
 (linum-mode)
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 280)
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 100)
 
 ;; Initialize package sources
 (require 'package)
@@ -98,7 +102,7 @@
   :demand t
   :init
   (setq projectile-keymap-prefix (kbd "C-c p"))
-  (setq projectile-project-search-path '("~" "/media/sf_shared_with_vm"))
+  (setq projectile-project-search-path '("~"))
   (setq projectile-switch-project-action #'magit-status))
 
 ;; Use case 1:
@@ -112,7 +116,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook (prog-mode . lsp)
+  :hook ((c-mode python-mode) . lsp)
   :config (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
