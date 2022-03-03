@@ -61,6 +61,8 @@
   :init
   (load-theme 'doom-opera t))
 
+(use-package multiple-cursors)
+
 (use-package ace-window
   :config
   (global-set-key (kbd "C-x o") 'ace-window))
@@ -96,6 +98,8 @@
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 
+(use-package cmake-mode)
+
 (use-package projectile
   :diminish projectile-mode
   :config (projectile-mode 1)
@@ -116,12 +120,19 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook ((c-mode python-mode) . lsp)
+  :hook ((c-mode python-mode cmake-mode) . lsp)
   :config (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
 
 (use-package lsp-ui)
+
+(use-package lsp-pyright
+  :hook (python-mode . (lambda () (require 'lsp-pyright)))
+  :config
+  (setq lsp-pyright-venv-directory "/home/koso/vivian")
+  (setq lsp-pyright-venv-path "/home/koso/vivian")
+  )
 
 (use-package flycheck
   :defer t
@@ -159,7 +170,7 @@
  ;; If there is more than one, they won't work right.
  '(global-linum-mode t)
  '(package-selected-packages
-   '(editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
+   '(cmake-mode lsp-pyright multiple-cursors editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
