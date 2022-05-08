@@ -16,6 +16,10 @@
 ;; Disable annoying sound
 (setq ring-bell-function 'ignore)
 
+;; Do not open new window when doing an ediff
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)
+
+
 ;; TODO: Rebuilt emacs with svg support and replace dvipng with dvisvg
 (setq org-preview-latex-default-process 'dvipng)
 
@@ -35,12 +39,26 @@
 
 ;; UI preferences
 (setq inhibit-startup-message t)
+(winner-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (set-fringe-mode 10)
 (menu-bar-mode -1)
 (linum-mode)
 (set-face-attribute 'default nil :font "Fira Code Retina" :height 100)
+
+
+(org-babel-do-load-languages 'org-babel-load-languages
+			     '((python . t)
+			       (emacs-lisp . t)
+			       (C . t)
+			       (js . t)
+			       (ditaa . t)
+			       (dot . t)
+			       (org . t)
+			       (latex . t)
+			       (shell . t)
+			       ))
 
 ;; Initialize package sources
 (require 'package)
@@ -120,7 +138,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook ((c-mode python-mode cmake-mode) . lsp)
+  :hook ((c-mode c++-mode python-mode cmake-mode) . lsp)
   :config (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
