@@ -1,9 +1,10 @@
 ;; Global keys
 (global-set-key (kbd "<f5>") 'revert-buffer)
+(global-set-key (kbd "M-/") 'delete-horizontal-space)
 
 ;; When the <> keys are not accessible by the left hand
-(global-set-key (kbd "M-z") 'beginning-of-buffer)
-(global-set-key (kbd "M-Z") 'end-of-buffer)
+; (global-set-key (kbd "M-z") 'beginning-of-buffer)
+; (global-set-key (kbd "M-Z") 'end-of-buffer)
 
 ;; Global settings
 (global-linum-mode 1)
@@ -18,7 +19,6 @@
 
 ;; Do not open new window when doing an ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
 
 ;; TODO: Rebuilt emacs with svg support and replace dvipng with dvisvg
 (setq org-preview-latex-default-process 'dvipng)
