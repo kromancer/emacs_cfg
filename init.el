@@ -138,7 +138,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook ((c-mode c++-mode python-mode cmake-mode) . lsp)
+  :hook ((c-mode c++-mode python-mode sh-mode cmake-mode) . lsp)
   :config (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
