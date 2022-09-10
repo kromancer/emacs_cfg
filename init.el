@@ -81,6 +81,9 @@
 
 (use-package multiple-cursors)
 
+(use-package expand-region
+  :bind ("C-M-SPC" . er/expand-region))
+
 (use-package ace-window
   :config
   (global-set-key (kbd "C-x o") 'ace-window))
@@ -188,7 +191,7 @@
  ;; If there is more than one, they won't work right.
  '(global-linum-mode t)
  '(package-selected-packages
-   '(cmake-mode lsp-pyright multiple-cursors editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
+   '(expand-region cmake-mode lsp-pyright multiple-cursors editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
