@@ -6,6 +6,9 @@
 ; (global-set-key (kbd "M-z") 'beginning-of-buffer)
 ; (global-set-key (kbd "M-Z") 'end-of-buffer)
 
+;; When on mac
+(setq mac-right-option-modifier 'none)
+
 ;; Global settings
 (global-linum-mode 1)
 
