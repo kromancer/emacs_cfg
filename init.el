@@ -23,8 +23,8 @@
 ;; Do not open new window when doing an ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
-;; TODO: Rebuilt emacs with svg support and replace dvipng with dvisvg
-(setq org-preview-latex-default-process 'dvipng)
+;; If emacs is built with svg support, else use 'dvipng
+(setq org-preview-latex-default-process 'dvisvg)
 
 ;; Disable annoying auto-indentations in org mode
 (setq org-src-preserve-indentation t)
@@ -32,6 +32,9 @@
 
 ;; Disable autonumbering of sections
 (setq org-export-with-section-numbers nil)
+
+;; When making something bold, don't see the stars around it
+(setq org-hide-emphasis-markers t)
 
 ;; Silence compiler warnings as they can be pretty disruptive
 (setq comp-async-report-warnings-errors nil)
@@ -48,8 +51,7 @@
 (set-fringe-mode 10)
 (menu-bar-mode -1)
 (linum-mode)
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 100)
-
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 200)
 
 (org-babel-do-load-languages 'org-babel-load-languages
 			     '((python . t)
@@ -81,6 +83,27 @@
   :defer t
   :init
   (load-theme 'doom-opera t))
+
+;; Make bold color a bit more discrete for doom opera
+(defface org-bold
+  '((t :foreground "#ECBE7B"
+       :background "#2e2e2e"
+       :weight bold
+       :underline t
+       ))
+  "Face for org-mode bold."
+  :group 'org-faces )
+
+(setq org-emphasis-alist
+  '(("*" ;; (bold :foreground "Orange" )
+     org-bold)
+    ("/" italic)
+    ("_" underline)
+    ("=" ;; (:background "maroon" :foreground "white")
+     org-verbatim verbatim)
+    ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
+     org-code verbatim)
+    ("+" (:strike-through t))))
 
 (use-package multiple-cursors)
 
