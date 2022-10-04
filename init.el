@@ -36,6 +36,8 @@
 ;; When making something bold, don't see the stars around it
 (setq org-hide-emphasis-markers t)
 
+(setq org-set-startup-visibility 'folded)
+
 ;; Silence compiler warnings as they can be pretty disruptive
 (setq comp-async-report-warnings-errors nil)
 
@@ -167,7 +169,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook ((c-mode c++-mode python-mode sh-mode cmake-mode) . lsp)
+  :hook ((lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode sh-mode cmake-mode) . lsp)
   :config (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
