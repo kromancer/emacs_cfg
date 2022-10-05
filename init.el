@@ -1,6 +1,7 @@
 ;; Global keys
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "M-/") 'delete-horizontal-space)
+(global-set-key (kbd "C-c f") 'forward-sexp)
 
 ;; When the <> keys are not accessible by the left hand
 ; (global-set-key (kbd "M-z") 'beginning-of-buffer)
@@ -36,7 +37,7 @@
 ;; When making something bold, don't see the stars around it
 (setq org-hide-emphasis-markers t)
 
-(setq org-set-startup-visibility 'folded)
+(setq org-startup-folded t)
 
 ;; Silence compiler warnings as they can be pretty disruptive
 (setq comp-async-report-warnings-errors nil)
