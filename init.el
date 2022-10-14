@@ -1,7 +1,9 @@
 ;; Global keys
 (global-set-key (kbd "<f5>") 'revert-buffer)
 (global-set-key (kbd "M-/") 'delete-horizontal-space)
+(global-set-key (kbd "C-c b") 'backward-sexp)
 (global-set-key (kbd "C-c f") 'forward-sexp)
+
 
 ;; When the <> keys are not accessible by the left hand
 ; (global-set-key (kbd "M-z") 'beginning-of-buffer)
@@ -12,6 +14,7 @@
 
 ;; Global settings
 (global-linum-mode 1)
+(setq linum-format " %d ")
 
 ;; Disable auto-files
 (setq make-backup-files nil)
@@ -27,34 +30,61 @@
 ;; If emacs is built with svg support, else use 'dvipng
 (setq org-preview-latex-default-process 'dvisvg)
 
+;; Customize org's latex output
+(setq org-latex-default-class "article")
+(setq org-export-with-date t)
+(setq org-export-with-toc 2)
+(setq org-export-with-author t)
+(setq org-export-with-email nil)
+(setq org-export-with-section-numbers t)
+(setq org-latex-toc-command "\\tableofcontents \\clearpage")
+(setq org-latex-default-packages-alist '(("auto" "inputenc" t ("pdflatex"))
+					 ("T1" "fontenc" t ("pdflatex"))
+					 (#1="" "graphicx" t)
+					 (#1# "longtable" nil)
+					 (#1# "wrapfig" nil)
+					 (#1# "rotating" nil)
+					 ("normalem" "ulem" t)
+					 (#1# "amsmath" t)
+					 (#1# "amssymb" t)
+					 (#1# "capt-of" nil)
+					 (#1# "parskip" nil})
+					 ("document" "ragged2e" nil)
+					 ("colorlinks, linkcolor=blue, anchorcolor=blue, urlcolor=blue, citecolor=blue" "hyperref" nil)))
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+
+
 ;; Disable annoying auto-indentations in org mode
 (setq org-src-preserve-indentation t)
 (setq org-adapt-indentation nil)
-
-;; Disable autonumbering of sections
-(setq org-export-with-section-numbers nil)
 
 ;; When making something bold, don't see the stars around it
 (setq org-hide-emphasis-markers t)
 
 (setq org-startup-folded t)
 
+(setq org-babel-C++-compiler "clang++")
+
 ;; Silence compiler warnings as they can be pretty disruptive
 (setq comp-async-report-warnings-errors nil)
 
 ;; emacs' default identation style is lame
 (setq c-default-style "linux"
-      c-basic-offset 4)
+      c-basic-offset 2)
+
+; (setq tab-always-indent 'complete)
 
 ;; UI preferences
 (setq inhibit-startup-message t)
 (winner-mode 1)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
-(set-fringe-mode 10)
 (menu-bar-mode -1)
-(linum-mode)
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 200)
+(set-face-attribute 'default nil :font "Fira Code Retina" :height 150)
 
 (org-babel-do-load-languages 'org-babel-load-languages
 			     '((python . t)
@@ -170,7 +200,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook ((lisp-interaction-mode emacs-lisp-mode c-mode c++-mode python-mode sh-mode cmake-mode) . lsp)
+  :hook ((c-mode c++-mode python-mode cmake-mode) . lsp)
   :config (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
@@ -181,16 +211,20 @@
   :hook (python-mode . (lambda () (require 'lsp-pyright)))
   :config
   (setq lsp-pyright-venv-directory "/home/koso/vivian")
-  (setq lsp-pyright-venv-path "/home/koso/vivian")
-  )
+  (setq lsp-pyright-venv-path "/home/koso/vivian"))
+
+(use-package realgud)
+(use-package realgud-lldb)
 
 (use-package flycheck
   :defer t
-  :hook ((lsp-mode emacs-lisp-mode) . flycheck-mode))
+  :config
+  (setq-default flycheck-disabled-checkers '(emacs-lisp-checkdoc))
+  :hook ((lsp-mode sh-mode emacs-lisp-mode) . flycheck-mode))
 
 (use-package company
   :after lsp-mode
-  :hook ((lsp-mode org-mode) . company-mode))
+  :hook ((lsp-mode org-mode emacs-lisp-mode) . company-mode))
 
 (use-package yasnippet
   :hook (lsp-mode . yas-minor-mode))
@@ -220,7 +254,7 @@
  ;; If there is more than one, they won't work right.
  '(global-linum-mode t)
  '(package-selected-packages
-   '(expand-region cmake-mode lsp-pyright multiple-cursors editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
+   '(dap-lldb expand-region cmake-mode lsp-pyright multiple-cursors editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
