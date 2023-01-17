@@ -13,7 +13,7 @@
 (setq mac-right-option-modifier 'none)
 
 ;; Global settings
-(global-linum-mode 1)
+(global-display-line-numbers-mode 1)
 (setq linum-format " %d ")
 
 ;; Disable auto-files
