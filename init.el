@@ -28,7 +28,7 @@
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
 ;; If emacs is built with svg support, else use 'dvipng
-(setq org-preview-latex-default-process 'dvisvg)
+;; (setq org-preview-latex-default-process 'dvisvg)
 
 ;; Customize org's latex output
 (setq org-latex-default-class "article")
@@ -137,6 +137,9 @@
     ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
      org-code verbatim)
     ("+" (:strike-through t))))
+
+;; Make math formulas readable
+(plist-put org-format-latex-options :scale 3)
 
 (use-package multiple-cursors)
 
