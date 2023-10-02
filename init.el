@@ -24,6 +24,9 @@
 ;; Disable annoying sound
 (setq ring-bell-function 'ignore)
 
+;; Disable byte compilation warnings
+(setq byte-compile-warnings nil)
+
 ;; Do not open new window when doing an ediff
 (setq ediff-window-setup-function 'ediff-setup-windows-plain)
 
@@ -36,6 +39,7 @@
 (setq org-export-with-toc 2)
 (setq org-export-with-author t)
 (setq org-export-with-email nil)
+(setq org-list-allow-alphabetical t)
 (setq org-export-with-section-numbers t)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
 (setq org-latex-default-packages-alist '(("auto" "inputenc" t ("pdflatex"))
@@ -57,6 +61,7 @@
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 
+(setq tex-fontify-script nil)
 
 ;; Disable annoying auto-indentations in org mode
 (setq org-src-preserve-indentation t)
@@ -103,7 +108,9 @@
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("melpa-stable" . "https://stable.melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
+			 ("nongnu" . "https://elpa.nongnu.org/nongnu/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
+
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -116,6 +123,9 @@
   :defer t
   :init
   (load-theme 'doom-opera t))
+
+
+(use-package pdf-tools)
 
 ;; Make bold color a bit more discrete for doom opera
 (defface org-bold
@@ -138,10 +148,15 @@
      org-code verbatim)
     ("+" (:strike-through t))))
 
+(use-package org-contrib)
+(add-to-list 'org-export-backends 'taskjuggler)
+
 ;; Make math formulas readable
-(plist-put org-format-latex-options :scale 3)
+(plist-put org-format-latex-options :scale 2)
 
 (use-package multiple-cursors)
+
+(use-package dot-mode)
 
 (use-package expand-region
   :bind ("C-M-SPC" . er/expand-region))
@@ -167,7 +182,7 @@
 ;; Remember M-x all-the-icons-install-fonts
 (use-package doom-modeline
   :init (doom-modeline-mode 1)
-  :custom ((doom-modeline-height 1)))
+  :custom ((doom-modeline-height 3)))
 
 (use-package rg)
 
@@ -189,7 +204,6 @@
   :demand t
   :init
   (setq projectile-keymap-prefix (kbd "C-c p"))
-  (setq projectile-project-search-path '("~"))
   (setq projectile-switch-project-action #'magit-status))
 
 ;; Use case 1:
@@ -211,10 +225,9 @@
 (use-package lsp-ui)
 
 (use-package lsp-pyright
-  :hook (python-mode . (lambda () (require 'lsp-pyright)))
-  :config
-  (setq lsp-pyright-venv-directory "/home/koso/vivian")
-  (setq lsp-pyright-venv-path "/home/koso/vivian"))
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp))))
 
 (use-package realgud)
 (use-package realgud-lldb)
@@ -228,6 +241,9 @@
 (use-package company
   :after lsp-mode
   :hook ((lsp-mode org-mode emacs-lisp-mode) . company-mode))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (use-package yasnippet
   :hook (lsp-mode . yas-minor-mode))
@@ -250,6 +266,12 @@
   (add-to-list 'auto-mode-alist '("\\.ewp\\'" . web-mode)))
 
 (require 'org-tempo)
+
+;; For syntax highlight in llvm's .td files
+(add-to-list 'load-path "/Users/ioanniss/llvm-project/llvm/utils/emacs")
+(require 'tablegen-mode)
+(require 'llvm-mode)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -257,7 +279,11 @@
  ;; If there is more than one, they won't work right.
  '(global-linum-mode t)
  '(package-selected-packages
-   '(dap-lldb expand-region cmake-mode lsp-pyright multiple-cursors editorconfig ace-window rg lsp-ui flycheck yasnippet company-mode company zenburn-theme which-key web-mode use-package magit lsp-mode doom-themes doom-modeline counsel-projectile)))
+   '(org-contrib company-lsp company-box web-mode editorconfig yasnippet
+		 company flycheck realgud-lldb lsp-pyright lsp-ui
+		 counsel-projectile cmake-mode magit which-key rg
+		 doom-modeline ace-window expand-region dot-mode
+		 multiple-cursors pdf-tools doom-themes)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
