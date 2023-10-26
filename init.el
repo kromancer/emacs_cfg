@@ -267,10 +267,19 @@
 
 (require 'org-tempo)
 
-;; For syntax highlight in llvm's .td files
-(add-to-list 'load-path "/Users/ioanniss/llvm-project/llvm/utils/emacs")
-(require 'tablegen-mode)
-(require 'llvm-mode)
+;; For syntax highlight in llvm's .ll & .td files
+(when (file-exists-p "/Users/ioanniss/llvm-project/llvm/utils/emacs")
+  (add-to-list 'load-path "/Users/ioanniss/llvm-project/llvm/utils/emacs")
+  (require 'tablegen-mode)
+  (require 'llvm-mode))
+
+;; For syntax highlight in .mlir and for LSP support
+(when (file-exists-p "/Users/ioanniss/llvm-project/mlir/utils/emacs")
+  (add-to-list 'load-path "/Users/ioanniss/llvm-project/mlir/utils/emacs")
+  (require 'mlir-mode)
+  (require 'mlir-lsp-client)
+  (add-hook 'mlir-mode-hook #'lsp)
+  (lsp-mlir-setup))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
