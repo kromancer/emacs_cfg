@@ -21,8 +21,12 @@
 (setq auto-save-default nil)
 (setq create-lockfiles nil)
 
-;; Disable annoying sound
-(setq ring-bell-function 'ignore)
+;; sounds
+(setq ring-bell-function t)
+;; (setq org-clock-sound "~/cheatsheets/hal_9000.wav")
+(setq org-clock-sound "~/cheatsheets/holy_grail_music.wav")
+;; (setq org-clock-sound "~/cheatsheets/bird.wav")
+;; (setq org-clock-sound "~/cheatsheets/chewy_roar.wav")
 
 ;; Disable byte compilation warnings
 (setq byte-compile-warnings nil)
@@ -33,12 +37,15 @@
 ;; If emacs is built with svg support, else use 'dvipng
 ;; (setq org-preview-latex-default-process 'dvisvg)
 
+;; my agenda files
+(setq org-agenda-files (directory-files-recursively "/Users/ioanniss/cheatsheets" "\\.org$"))
+
 ;; Customize org's latex output
 (setq org-latex-default-class "article")
 (setq org-export-with-date t)
 (setq org-export-with-toc 2)
 (setq org-export-with-author t)
-(setq org-export-with-email nil)
+(setq org-export-with-email t)
 (setq org-list-allow-alphabetical t)
 (setq org-export-with-section-numbers t)
 (setq org-latex-toc-command "\\tableofcontents \\clearpage")
@@ -105,8 +112,8 @@
 
 ;; Initialize package sources
 (require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
-			 ("melpa-stable" . "https://stable.melpa.org/packages/")
+(setq package-archives '(("jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/")
+			 ("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
 			 ("nongnu" . "https://elpa.nongnu.org/nongnu/")
 			 ("elpa" . "https://elpa.gnu.org/packages/")))
@@ -137,6 +144,8 @@
   "Face for org-mode bold."
   :group 'org-faces )
 
+(setq org-latex-inputenc-alist '(("utf8" . "utf8x")))
+
 (setq org-emphasis-alist
   '(("*" ;; (bold :foreground "Orange" )
      org-bold)
@@ -150,6 +159,10 @@
 
 (use-package org-contrib)
 (add-to-list 'org-export-backends 'taskjuggler)
+
+;; Save clock history across emacs sessions
+(setq org-clock-persist 'history)
+(org-clock-persistence-insinuate)
 
 ;; Make math formulas readable
 (plist-put org-format-latex-options :scale 2)
@@ -218,7 +231,10 @@
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :hook ((c-mode c++-mode python-mode cmake-mode) . lsp)
-  :config (setq lsp-enable-on-type-formatting nil)
+  :init
+  (setq lsp-clangd-binary-path "/Users/ioanniss/llvm-project/build/bin/clangd")
+  :config
+  (setq lsp-enable-on-type-formatting nil)
   :bind (:map lsp-mode-map
 	      ([?\M-\t] . completion-at-point)))
 
@@ -229,8 +245,8 @@
                           (require 'lsp-pyright)
                           (lsp))))
 
-(use-package realgud)
-(use-package realgud-lldb)
+;; (use-package realgud)
+;; (use-package realgud-lldb)
 
 (use-package flycheck
   :defer t
@@ -257,6 +273,22 @@
   :config
   (editorconfig-mode 1))
 
+;; Configure Elfeed
+(use-package elfeed
+  :custom
+  (elfeed-db-directory
+   (expand-file-name "elfeed" user-emacs-directory))
+  (elfeed-show-entry-switch 'display-buffer)
+  :bind
+  ("C-c w e" . elfeed))
+
+(setq elfeed-feeds
+      '("https://www.jeremykun.com/index.xml"
+	"https://discourse.llvm.org/c/mlir/31.rss"
+	"https://www.youtube.com/feeds/videos.xml?channel_id=UC1r0DG-KEPyqOeW6o79PByw" ; Potato
+	"https://www.youtube.com/feeds/videos.xml?channel_id=UCIwQ8uOeRFgOEvBLYc3kc3g" ; Onur Mutlu Lectures
+	))
+
 ;; Use-case:
 ;; C-c C-f for folding/unfolding
 ;; C-c C-e f for folding/unfolding children
@@ -278,6 +310,7 @@
   (add-to-list 'load-path "/Users/ioanniss/llvm-project/mlir/utils/emacs")
   (require 'mlir-mode)
   (require 'mlir-lsp-client)
+  (setq lsp-mlir-server-executable "/Users/ioanniss/llvm-project/build/bin/mlir-lsp-server")
   (add-hook 'mlir-mode-hook #'lsp)
   (lsp-mlir-setup))
 
@@ -288,11 +321,11 @@
  ;; If there is more than one, they won't work right.
  '(global-linum-mode t)
  '(package-selected-packages
-   '(org-contrib company-lsp company-box web-mode editorconfig yasnippet
-		 company flycheck realgud-lldb lsp-pyright lsp-ui
-		 counsel-projectile cmake-mode magit which-key rg
-		 doom-modeline ace-window expand-region dot-mode
-		 multiple-cursors pdf-tools doom-themes)))
+   '(ace-window cmake-mode company-box counsel-projectile doom-modeline
+		doom-themes dot-mode editorconfig elfeed expand-region
+		flycheck htmlize lsp-pyright lsp-ui magit
+		multiple-cursors org-contrib pdf-tools rg web-mode
+		which-key yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
