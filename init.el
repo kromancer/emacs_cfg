@@ -230,7 +230,7 @@
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
-  :hook ((c-mode c++-mode python-mode cmake-mode) . lsp)
+  :hook ((c-mode c++-mode python-mode cmake-mode latex-mode LaTex-mode) . lsp)
   :init
   (setq lsp-clangd-binary-path "/Users/ioanniss/llvm-project/build/bin/clangd")
   :config
@@ -273,6 +273,30 @@
   :config
   (editorconfig-mode 1))
 
+(use-package auctex)
+
+(use-package auctex
+  :ensure t
+  :config
+  (setq TeX-auto-save t)
+  (setq TeX-parse-self t)
+  (setq-default TeX-master nil)
+  (add-hook 'LaTeX-mode-hook 'visual-line-mode)
+  (add-hook 'LaTeX-mode-hook 'flyspell-mode)
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  ;; Specify default PDF viewer
+  ;; (setq TeX-view-program-selection '((output-pdf "PDF Viewer")))
+  ;; (setq TeX-view-program-list '(("PDF Viewer" "open %o")))
+  )
+
+(use-package tikz
+  :ensure t
+  :mode ("\\.tikz\\'" . LaTex-mode)
+  :config
+  (add-hook 'LaTeX-mode-hook 'tikz-mode)
+  ;; Optional: Enable auto-indentation for TikZ
+  (add-hook 'tikz-mode-hook '(lambda () (setq indent-tabs-mode nil))))
+
 ;; Configure Elfeed
 (use-package elfeed
   :custom
@@ -287,6 +311,8 @@
 	"https://discourse.llvm.org/c/mlir/31.rss"
 	"https://www.youtube.com/feeds/videos.xml?channel_id=UC1r0DG-KEPyqOeW6o79PByw" ; Potato
 	"https://www.youtube.com/feeds/videos.xml?channel_id=UCIwQ8uOeRFgOEvBLYc3kc3g" ; Onur Mutlu Lectures
+	"https://github.com/scipy/scipy/issues/19105.atom" ; Issue on sorted COO in scipy
+	;; "https://www.anandtech.com/rss/"
 	))
 
 ;; Use-case:
@@ -321,11 +347,11 @@
  ;; If there is more than one, they won't work right.
  '(global-linum-mode t)
  '(package-selected-packages
-   '(ace-window cmake-mode company-box counsel-projectile doom-modeline
-		doom-themes dot-mode editorconfig elfeed expand-region
-		flycheck htmlize lsp-pyright lsp-ui magit
-		multiple-cursors org-contrib pdf-tools rg web-mode
-		which-key yasnippet)))
+   '(ace-window auctex cmake-mode company-box counsel-projectile
+		doom-modeline doom-themes dot-mode editorconfig elfeed
+		expand-region flycheck htmlize lsp-pyright lsp-ui
+		magit multiple-cursors org-contrib pdf-tools rg tikz
+		web-mode which-key yasnippet)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
